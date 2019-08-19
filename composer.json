@@ -1,0 +1,28 @@
+{
+    "name": "polaris/laravel-entity",
+    "description": "A Laravel package to give your PHP standard classes identity and extra functionality on the fly.",
+    "require-dev": {
+        "laravel/framework": "^6.0@dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andres G. Carmona",
+            "email": "ing.andres.carmona@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Polaris\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Polaris\\LaravelEntityServiceProvider"
+            ]
+        }
+    }
+}
