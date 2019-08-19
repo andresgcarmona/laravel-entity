@@ -14,9 +14,7 @@
         public function register()
         {
             //
-        }
-
-        /**
+        }/**
          * Bootstrap services.
          *
          * @return void
