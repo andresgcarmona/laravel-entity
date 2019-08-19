@@ -1,6 +1,6 @@
 <?php
 
-    namespace Polaris\Providers;
+    namespace Polaris;
 
     use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +14,9 @@
         public function register()
         {
             //
-        }/**
+        }
+
+        /**
          * Bootstrap services.
          *
          * @return void
