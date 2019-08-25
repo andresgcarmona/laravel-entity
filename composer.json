@@ -1,35 +1,36 @@
 {
-    "name": "polaris/laravel-entity",
-    "description": "A Laravel package to give your PHP standard classes identity and extra functionality on the fly.",
-    "require-dev": {
-        "laravel/framework": "^6.0@dev"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Andres G. Carmona",
-            "email": "ing.andres.carmona@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": "^7.1"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Polaris\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Polaris\\LaravelEntityServiceProvider"
-            ]
-        }
+  "name": "polaris/laravel-entity",
+  "description": "A Laravel package to give your PHP standard classes identity and extra functionality on the fly.",
+  "require-dev": {
+    "laravel/framework": "^6.0@dev"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andres G. Carmona",
+      "email": "ing.andres.carmona@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": "^7.1",
+    "ext-json": "*"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Polaris\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Polaris\\LaravelEntityServiceProvider"
+      ]
+    }
+  }
 }
