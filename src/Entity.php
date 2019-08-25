@@ -3,9 +3,12 @@
     namespace Polaris;
 
     use ArrayAccess;
+    use Illuminate\Contracts\Support\Arrayable;
+    use Illuminate\Contracts\Support\Jsonable;
+    use RuntimeException;
     use stdClass;
 
-    class Entity implements ArrayAccess
+    class Entity implements ArrayAccess, Jsonable, Arrayable
     {
         /**
          * Entity's attributes.
@@ -71,6 +74,9 @@
         {
             if ($this->hasCast($key)) {
                 $this->attributes[$key] = $this->castAttribute($key, $value);
+            }
+            else {
+                $this->attributes[$key] = $value;
             }
         }
 
@@ -190,7 +196,7 @@
          */
         protected function hasCast($key): bool
         {
-            return in_array($this->casts, $key, true);
+            return array_key_exists($key, $this->casts);
         }
 
         /**
@@ -203,5 +209,39 @@
         protected function castAttribute($key, $value)
         {
             return new $this->casts[$key]($value);
+        }
+
+        /**
+         * Return entity's attributes.
+         *
+         * @return array
+         */
+        public function toArray()
+        {
+            return array_map(static function($attribute)
+            {
+                if($attribute instanceof Arrayable) {
+                    return $attribute->toArray();
+                }
+
+                return $attribute;
+            }, $this->attributes);
+        }
+
+        /**
+         * Returns a json encoded representation of the entity's attributes.
+         *
+         * @param  int  $options
+         * @return false|string
+         */
+        public function toJson($options = 0)
+        {
+            $json = json_encode($this->toArray(), $options);
+
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new RuntimeException(json_last_error_msg());
+            }
+
+            return $json;
         }
     }
