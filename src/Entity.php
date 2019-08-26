@@ -18,11 +18,32 @@
         protected $attributes = [];
 
         /**
+         * The original attributes passed to the entity's constructor.
+         *
+         * @var array
+         */
+        protected $originalAttributes = [];
+
+        /**
          * The attributes that should be cast to other types.
          *
          * @var array
          */
         protected $casts = [];
+
+        /**
+         * Define this if the attributes has more data than the one the entity is intended to be constructed from.
+         *
+         * @var null
+         */
+        protected $key = null;
+
+        /**
+         * The extra attibutes to be merged in the entity's attributes.
+         *
+         * @var array
+         */
+        protected $extras = [];
 
         /**
          * Entity constructor.
@@ -37,8 +58,17 @@
                 $attributes = $this->getAttributesFromClass($attributes);
             }
 
+            // Backup original attributes.
+            $this->originalAttributes = $attributes;
+
+            // Get attributes by the key provided in the key field.
+            $attributes = $this->getAttributesByKey($attributes);
+
             // Fill the attributes array.
             $this->fillAttributes($attributes);
+
+            // Merge extra attributes in attributes array.
+            $this->mergeExtraAttributes();
         }
 
         /**
@@ -50,6 +80,53 @@
         public function getAttributesFromClass($object): array
         {
             return get_object_vars($object);
+        }
+
+        /**
+         * Returns the name of the key for this collection.
+         *
+         * @return string
+         */
+        public function getKey()
+        {
+            return $this->key;
+        }
+
+        /**
+         * Returns the extra attributes array.
+         *
+         * @return array
+         */
+        public function getExtras()
+        {
+            return $this->extras;
+        }
+
+        /**
+         * Returns the attributes defined by the key, or the originals if key is null.
+         *
+         * @param $attributes
+         * @return mixed
+         */
+        public function getAttributesByKey($attributes)
+        {
+            // Get key value.
+            $key = $this->getKey();
+
+            if ($key !== null) {
+                return $attributes[$key];
+            }
+
+            return $attributes;
+        }
+
+        public function mergeExtraAttributes()
+        {
+            foreach ($this->getExtras() as $key => $attribute) {
+                if (isset($this->originalAttributes[$attribute])) {
+                    $this->attributes[$attribute] = $this->originalAttributes[$attribute];
+                }
+            }
         }
 
         /**
@@ -74,8 +151,7 @@
         {
             if ($this->hasCast($key)) {
                 $this->attributes[$key] = $this->castAttribute($key, $value);
-            }
-            else {
+            } else {
                 $this->attributes[$key] = $value;
             }
         }
@@ -218,9 +294,9 @@
          */
         public function toArray()
         {
-            return array_map(static function($attribute)
+            return array_map(static function ($attribute)
             {
-                if($attribute instanceof Arrayable) {
+                if ($attribute instanceof Arrayable) {
                     return $attribute->toArray();
                 }
 
