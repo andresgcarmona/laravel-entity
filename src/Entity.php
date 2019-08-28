@@ -62,7 +62,7 @@
             $this->originalAttributes = $attributes;
 
             // Get attributes by the key provided in the key field.
-            $attributes = $this->getAttributesByKey($attributes);
+            $attributes = json_decode(json_encode($this->getAttributesByKey($attributes)), true);
 
             // Fill the attributes array.
             $this->fillAttributes($attributes);
