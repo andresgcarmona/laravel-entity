@@ -42,11 +42,9 @@
         public function __construct(array $data = [])
         {
             // Hydrate items array with the items passes in the data parameter.
-            if (isset($data[$this->getKey()])) {
-                foreach ($data[$this->getKey()] as $item) {
-                    // Create a new instances of $this->entity type.
-                    $this->items[] = new $this->entity($item);
-                }
+            foreach ($data as $item) {
+                // Create a new instances of $this->entity type.
+                $this->items[] = new $this->entity($item);
             }
 
             // Hydrate extra attributes.
