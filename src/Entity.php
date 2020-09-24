@@ -5,10 +5,10 @@
     use ArrayAccess;
     use Illuminate\Contracts\Support\Arrayable;
     use Illuminate\Contracts\Support\Jsonable;
-    use RuntimeException;
     use stdClass;
+    use JsonSerializable;
 
-    class Entity implements ArrayAccess, Jsonable, Arrayable
+    class Entity implements ArrayAccess, Jsonable, JsonSerializable, Arrayable
     {
         /**
          * Entity's attributes.
@@ -113,7 +113,7 @@
             // Get key value.
             $key = $this->getKey();
 
-            if ($key !== null) {
+            if ($key !== null && isset($attributes[$key])) {
                 return $attributes[$key];
             }
 
@@ -296,28 +296,28 @@
         {
             return array_map(static function ($attribute)
             {
-                if ($attribute instanceof Arrayable) {
-                    return $attribute->toArray();
-                }
-
-                return $attribute;
+                return $attribute instanceof Arrayable ? $attribute->toArray() : $attribute;
             }, $this->attributes);
         }
 
-        /**
-         * Returns a json encoded representation of the entity's attributes.
-         *
-         * @param  int  $options
-         * @return false|string
-         */
         public function toJson($options = 0)
         {
-            $json = json_encode($this->toArray(), $options);
+            $json = json_encode($this->jsonSerialize(), $options);
 
             if (JSON_ERROR_NONE !== json_last_error()) {
                 throw new RuntimeException(json_last_error_msg());
             }
 
             return $json;
+        }
+
+        public function __toString()
+        {
+            return $this->toJson();
+        }
+
+        public function jsonSerialize()
+        {
+            return $this->toArray();
         }
     }
