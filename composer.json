@@ -2,6 +2,7 @@
   "name": "polaris/laravel-entity",
   "description": "A Laravel package to give your PHP standard classes identity and extra functionality on the fly.",
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "orchestra/testbench": "^7.0@dev"
   },
   "license": "MIT",
