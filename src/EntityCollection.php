@@ -103,4 +103,9 @@
             // Merges items and extras attributes.
             return array_merge(['items' => $items], $this->getExtras());
         }
+
+        public function __toString()
+        {
+            return $this->toJson();
+        }
     }
